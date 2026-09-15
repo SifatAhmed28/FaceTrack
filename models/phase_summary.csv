@@ -1,0 +1,5 @@
+Phase,Topic,Model,Metric,Value
+1,Skin Type,MobileNetV2 20+15ep,Test Acc,0.6300
+2,Lesion Severity,MobileNetV2 20+15ep + class weights,Test Acc,0.7764
+3,Quantization,TFLite INT8 (100 cal),">70% shrink, <5% delta",See Phase3 metrics
+4,Product KB,7-dim vectors,Cosine sanity,PASS diag=1.0

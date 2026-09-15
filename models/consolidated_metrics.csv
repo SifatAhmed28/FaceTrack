@@ -1,0 +1,16 @@
+Phase,Model,Metric,Value
+Phase1,MobileNetV2 Skin,Test Accuracy,0.6300
+Phase1,MobileNetV2 Skin,Test Loss,0.9369
+Phase1,Skin combination,Per-Class Acc,0.7000
+Phase1,Skin dry,Per-Class Acc,0.6200
+Phase1,Skin normal,Per-Class Acc,0.5000
+Phase1,Skin oily,Per-Class Acc,0.7000
+Phase2,MobileNetV2 Lesion,Test Accuracy,0.7764
+Phase2,Lesion Normal,Per-Class Acc,0.8738
+Phase2,Lesion Mild,Per-Class Acc,0.5515
+Phase2,Lesion Moderate,Per-Class Acc,0.5641
+Phase2,Lesion High Concern,Per-Class Acc,0.5973
+Phase4,Product KB,Num Products,1138
+Phase4,Product KB,Vector Dim,7
+Phase4,Product KB,Num Products,1138
+Phase4,Product KB,Vector Dim,7

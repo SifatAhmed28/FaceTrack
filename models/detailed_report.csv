@@ -1,0 +1,3 @@
+Model,Dataset,Classes,Test Acc,H5 Size MB,TFLite Size MB
+Skin Type (MobileNetV2),Oily-Dry-Skin-Types test,"combination,dry,normal,oily",0.6300,21.70,NA
+Lesion Severity (MobileNetV2),HAM10000 test,"Normal,Mild,Moderate,High Concern",0.7764,21.70,NA

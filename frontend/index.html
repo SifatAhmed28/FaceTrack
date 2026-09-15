@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FaceTrack — Real-Time AI Skincare Advisor</title>
+  <meta name="description" content="AI-driven face detection, skin type classification, lesion severity grading, and personalized product recommendations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="glow-backdrop"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="9"></circle>
+            <circle cx="9" cy="10" r="1.5" fill="currentColor"></circle>
+            <circle cx="15" cy="10" r="1.5" fill="currentColor"></circle>
+            <path d="M9.5 15a3.5 3.5 0 0 0 5 0"></path>
+            <path d="M12 2v2M12 20v2M2 12h2M20 12h2" stroke-opacity="0.5"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>FaceTrack <span class="badge-ai">AI Advisor</span></h1>
+          <p class="tagline">Real-Time Facial Diagnostics & Intelligent Skincare Matching</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div id="backend-status-badge" class="status-badge status-checking">
+          <span class="status-dot"></span>
+          <span id="backend-status-text">Checking API...</span>
+        </div>
+        <button id="settings-btn" class="icon-button" title="Configure Backend URL">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-layout">
+    <!-- Left Column: Input & Controls -->
+    <section class="panel panel-inputs">
+      <div class="panel-header">
+        <h2>1. Face Diagnostic Capture</h2>
+        <p>Position face centered in good lighting</p>
+      </div>
+
+      <!-- Mode Selector -->
+      <div class="mode-tabs">
+        <button id="tab-webcam" class="tab-btn active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 7l-7 5 7 5V7z"></path>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+          </svg>
+          Webcam Live
+        </button>
+        <button id="tab-upload" class="tab-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          Upload Photo
+        </button>
+      </div>
+
+      <!-- Capture Container -->
+      <div class="media-container">
+        <!-- Webcam View -->
+        <div id="webcam-view" class="media-view active">
+          <video id="video-stream" autoplay playsinline muted></video>
+          <canvas id="detection-canvas"></canvas>
+          <div id="camera-overlay" class="camera-target-guide">
+            <div class="oval-target"></div>
+            <span class="target-hint">Align face inside frame</span>
+          </div>
+          <div class="camera-controls">
+            <button id="btn-start-camera" class="btn btn-secondary btn-sm">Start Camera</button>
+            <button id="btn-snap-camera" class="btn btn-primary btn-sm" disabled>Capture Snapshot</button>
+          </div>
+        </div>
+
+        <!-- Upload View -->
+        <div id="upload-view" class="media-view">
+          <div id="drop-zone" class="drop-zone">
+            <svg class="drop-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+              <path d="M12 12v9"></path>
+              <path d="m16 16-4-4-4 4"></path>
+            </svg>
+            <p class="drop-title">Drag & drop selfie here</p>
+            <span class="drop-sub">or click to browse JPG, PNG (up to 10MB)</span>
+            <input type="file" id="file-input" accept="image/*" class="file-hidden" />
+          </div>
+          <div id="upload-preview-wrap" class="upload-preview-wrap hidden">
+            <img id="upload-preview-img" alt="Uploaded Preview" />
+            <button id="btn-remove-image" class="btn-clear-img" title="Remove image">×</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lifestyle Section -->
+      <div class="lifestyle-section">
+        <h3>2. Lifestyle Factors</h3>
+        <p class="subtext">Personalizes moisture and anti-blemish recommendations</p>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <label for="slider-sleep">
+              <span class="icon">🌙</span> Average Sleep
+            </label>
+            <span id="val-sleep" class="slider-val">7.0 hrs</span>
+          </div>
+          <input type="range" id="slider-sleep" min="4" max="10" step="0.5" value="7.0" />
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <label for="slider-water">
+              <span class="icon">💧</span> Daily Water Intake
+            </label>
+            <span id="val-water" class="slider-val">2.0 L</span>
+          </div>
+          <input type="range" id="slider-water" min="0.5" max="4.5" step="0.25" value="2.0" />
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <label for="slider-stress">
+              <span class="icon">⚡</span> Daily Stress Level
+            </label>
+            <span id="val-stress" class="slider-val">5 / 10</span>
+          </div>
+          <input type="range" id="slider-stress" min="1" max="10" step="1" value="5" />
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="action-buttons">
+        <button id="btn-analyze" class="btn btn-primary btn-glow" disabled>
+          <span class="btn-text">Analyze My Skin</span>
+          <span class="btn-icon">→</span>
+        </button>
+        <button id="btn-demo" class="btn btn-outline">
+          Load Demo Sample
+        </button>
+      </div>
+    </section>
+
+    <!-- Right Column: Diagnostics & Product Recommendations -->
+    <section class="panel panel-results">
+      <div class="panel-header">
+        <h2>Diagnostic Results & Routine</h2>
+        <p>Real-time neural inference & personalized formulation matching</p>
+      </div>
+
+      <!-- Placeholder State -->
+      <div id="results-empty" class="results-empty">
+        <div class="empty-illustration">
+          <div class="pulse-ring"></div>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 6v6l4 2"></path>
+          </svg>
+        </div>
+        <h3>Awaiting Face Capture</h3>
+        <p>Start your camera or upload a clear photo, adjust lifestyle metrics, and click <strong>Analyze My Skin</strong>.</p>
+      </div>
+
+      <!-- Loading State -->
+      <div id="results-loading" class="results-loading hidden">
+        <div class="loader-spinner"></div>
+        <h3 id="loader-status">Running Neural Diagnostics...</h3>
+        <p class="loader-sub">YuNet Face Localization • MobileNetV2 Classification • Paula's Choice Matching</p>
+      </div>
+
+      <!-- Populated Results -->
+      <div id="results-content" class="results-content hidden">
+        <!-- Overview Cards Grid -->
+        <div class="diagnostic-grid">
+          <!-- Card 1: Skin Type -->
+          <div class="diag-card skin-type-card">
+            <div class="card-head">
+              <span class="card-label">Predicted Skin Type</span>
+              <span id="res-skin-badge" class="badge-pill badge-primary">Combination</span>
+            </div>
+            <div class="confidence-display">
+              <span id="res-skin-conf" class="big-stat">78.4%</span>
+              <span class="stat-sub">Model Confidence</span>
+            </div>
+            <div id="res-skin-bars" class="metric-bars">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Card 2: Skin Concern -->
+          <div class="diag-card lesion-card">
+            <div class="card-head">
+              <span class="card-label">Skin Concern Severity</span>
+              <span id="res-lesion-badge" class="badge-pill badge-warning">Mild Concern</span>
+            </div>
+            <div class="confidence-display">
+              <span id="res-lesion-conf" class="big-stat">64.1%</span>
+              <span class="stat-sub">Severity Confidence</span>
+            </div>
+            <div id="res-lesion-bars" class="metric-bars">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Lifestyle Impact Tags -->
+        <div id="res-lifestyle-wrap" class="lifestyle-notes-wrap">
+          <span class="notes-title">Lifestyle Diagnostics:</span>
+          <div id="res-lifestyle-tags" class="lifestyle-tags">
+            <!-- Dynamic pills -->
+          </div>
+        </div>
+
+        <!-- Recommended Products Section -->
+        <div class="recommendations-section">
+          <div class="sec-header">
+            <h3>Curated Routine (Top 5 Matches)</h3>
+            <span class="rec-sub">Matched from 1,138 Paula's Choice Verified Formulations</span>
+          </div>
+
+          <div id="res-products-list" class="products-grid">
+            <!-- Dynamically populated product cards -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Settings Modal for API Configuration -->
+  <div id="settings-modal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Backend API Settings</h3>
+        <button id="btn-close-modal" class="btn-close">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">
+          Connect your frontend to your Render backend web service.
+        </p>
+        <div class="form-group">
+          <label for="api-url-input">Render API Base URL</label>
+          <input type="url" id="api-url-input" placeholder="https://your-app.onrender.com" />
+          <span class="help-text">Leave blank or use <code>http://localhost:8000</code> for local development.</span>
+        </div>
+        <div id="modal-test-result" class="test-result-box hidden"></div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-test-api" class="btn btn-outline btn-sm">Test Connection</button>
+        <button id="btn-save-api" class="btn btn-primary btn-sm">Save & Connect</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
