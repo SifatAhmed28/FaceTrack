@@ -4,17 +4,19 @@
  * and dynamic diagnostic dashboard rendering.
  */
 
+// Permanent Backend API URL
+const API_BASE_URL = "https://facetrack-7ex1.onrender.com";
+
 // State
-let currentApiUrl = localStorage.getItem("facetrack_api_url") || "http://localhost:8000";
 let activeMode = "webcam"; // "webcam" | "upload"
 let mediaStream = null;
 let currentImageBlob = null; // Blob or File ready for analysis
 let currentBase64 = null;
+let healthCheckTimer = null;
 
 // DOM Elements
 const backendStatusBadge = document.getElementById("backend-status-badge");
 const backendStatusText = document.getElementById("backend-status-text");
-const settingsBtn = document.getElementById("settings-btn");
 
 // Tabs
 const tabWebcam = document.getElementById("tab-webcam");
@@ -66,43 +68,45 @@ const resLesionBars = document.getElementById("res-lesion-bars");
 const resLifestyleTags = document.getElementById("res-lifestyle-tags");
 const resProductsList = document.getElementById("res-products-list");
 
-// Modal
-const settingsModal = document.getElementById("settings-modal");
-const btnCloseModal = document.getElementById("btn-close-modal");
-const apiUrlInput = document.getElementById("api-url-input");
-const btnTestApi = document.getElementById("btn-test-api");
-const btnSaveApi = document.getElementById("btn-save-api");
-const modalTestResult = document.getElementById("modal-test-result");
-
 // ==========================================================================
 // Initialization
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
-  apiUrlInput.value = currentApiUrl;
   checkBackendHealth();
   setupEventListeners();
 });
 
 // ==========================================================================
-// Backend Health Checker
+// Backend Health Checker with Auto-Retry for Render Cold Starts
 // ==========================================================================
 async function checkBackendHealth() {
   backendStatusBadge.className = "status-badge status-checking";
   backendStatusText.textContent = "Connecting to API...";
 
   try {
-    const res = await fetch(`${currentApiUrl}/api/health`, { method: "GET" });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+    const res = await fetch(`${API_BASE_URL}/api/health`, {
+      method: "GET",
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
     if (res.ok) {
       const data = await res.json();
       backendStatusBadge.className = "status-badge status-connected";
       backendStatusText.textContent = `Online (${data.models?.total_products || "1k+"} prods)`;
+      if (healthCheckTimer) clearTimeout(healthCheckTimer);
       return true;
     } else {
       throw new Error(`HTTP ${res.status}`);
     }
   } catch (err) {
-    backendStatusBadge.className = "status-badge status-disconnected";
-    backendStatusText.textContent = "API Offline (Click Settings)";
+    // Render free tier spins down after 15m; first request takes ~30-45s to wake up
+    backendStatusBadge.className = "status-badge status-checking";
+    backendStatusText.textContent = "Waking up API (~30s)...";
+    // Retry polling every 4 seconds
+    healthCheckTimer = setTimeout(checkBackendHealth, 4000);
     return false;
   }
 }
@@ -146,16 +150,6 @@ function setupEventListeners() {
   // Analyze & Demo
   btnAnalyze.addEventListener("click", runAnalysis);
   btnDemo.addEventListener("click", runDemoAnalysis);
-
-  // Settings Modal
-  settingsBtn.addEventListener("click", () => {
-    apiUrlInput.value = currentApiUrl;
-    modalTestResult.className = "test-result-box hidden";
-    settingsModal.classList.remove("hidden");
-  });
-  btnCloseModal.addEventListener("click", () => settingsModal.classList.add("hidden"));
-  btnTestApi.addEventListener("click", testCustomApiUrl);
-  btnSaveApi.addEventListener("click", saveCustomApiUrl);
 }
 
 // ==========================================================================
@@ -287,13 +281,13 @@ async function runAnalysis() {
       formData.append("water_liters", waterLiters);
       formData.append("stress_level", stressLevel);
 
-      response = await fetch(`${currentApiUrl}/api/analyze`, {
+      response = await fetch(`${API_BASE_URL}/api/analyze`, {
         method: "POST",
         body: formData,
       });
     } else {
       // Base64 fallback
-      response = await fetch(`${currentApiUrl}/api/analyze-base64`, {
+      response = await fetch(`${API_BASE_URL}/api/analyze-base64`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -313,7 +307,7 @@ async function runAnalysis() {
     const data = await response.json();
     renderResults(data);
   } catch (err) {
-    alert(`Analysis Failed: ${err.message}\n\nTip: If deploying on Render, the free backend may take 30-45s to wake up on the first request. Click 'Load Demo Sample' in the meantime!`);
+    alert(`Analysis: ${err.message}\n\nNote: If the Render server is waking up from idle, please wait ~30s and try again, or click 'Load Demo Sample' in the meantime.`);
   } finally {
     showLoading(false);
   }
@@ -322,18 +316,19 @@ async function runAnalysis() {
 async function runDemoAnalysis() {
   showLoading(true);
   try {
-    // Try to fetch sample from backend
-    const res = await fetch(`${currentApiUrl}/api/sample`);
+    // Try to fetch sample from live backend
+    const res = await fetch(`${API_BASE_URL}/api/sample`);
     if (res.ok) {
       const data = await res.json();
       renderResults(data);
+      showLoading(false);
       return;
     }
   } catch (e) {
-    // Backend offline: use hardcoded fallback sample
+    // If backend is sleeping/cold starting, fallback to instant local demo
   }
 
-  // Fallback sample data
+  // Instant fallback sample data
   const sampleData = {
     face_detected: true,
     skin_type: {
@@ -397,7 +392,7 @@ async function runDemoAnalysis() {
   setTimeout(() => {
     renderResults(sampleData);
     showLoading(false);
-  }, 400);
+  }, 350);
 }
 
 function showLoading(isLoading) {
@@ -509,36 +504,4 @@ function renderResults(data) {
       `;
     });
   }
-}
-
-// ==========================================================================
-// Settings Modal Logic
-// ==========================================================================
-async function testCustomApiUrl() {
-  const url = apiUrlInput.value.trim().replace(/\/$/, "");
-  modalTestResult.className = "test-result-box";
-  modalTestResult.textContent = "Testing connection to " + url + "...";
-  modalTestResult.classList.remove("hidden");
-
-  try {
-    const res = await fetch(`${url}/api/health`);
-    if (res.ok) {
-      const data = await res.json();
-      modalTestResult.className = "test-result-box test-success";
-      modalTestResult.textContent = `Connection Successful! Backend online with ${data.models?.total_products || 0} products in KB.`;
-    } else {
-      throw new Error(`Server returned HTTP ${res.status}`);
-    }
-  } catch (err) {
-    modalTestResult.className = "test-result-box test-error";
-    modalTestResult.textContent = `Connection Failed: ${err.message}. Make sure the Render URL is correct and active.`;
-  }
-}
-
-function saveCustomApiUrl() {
-  const url = apiUrlInput.value.trim().replace(/\/$/, "");
-  currentApiUrl = url || "http://localhost:8000";
-  localStorage.setItem("facetrack_api_url", currentApiUrl);
-  settingsModal.classList.add("hidden");
-  checkBackendHealth();
 }
