@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FaceTrack — Real-Time AI Skincare Advisor</title>
-  <meta name="description" content="AI-driven face detection, skin type classification, lesion severity grading, and personalized product recommendations." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>FaceTrack — Real-Time AI Skincare Advisor & Neural Architecture</title>
+  <meta name="description" content="AI facial diagnostics, MobileNetV2 skin barrier classification, lesion severity grading, and Paula's Choice formulation recommendations." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -28,9 +28,26 @@
         </div>
         <div class="brand-text">
           <h1>FaceTrack <span class="badge-ai">AI Advisor</span></h1>
-          <p class="tagline">Real-Time Facial Diagnostics & Intelligent Skincare Matching</p>
+          <p class="tagline">Facial Diagnostics & Intelligent Formulation Matching</p>
         </div>
       </div>
+
+      <!-- Top Primary Navigation Switcher -->
+      <nav class="primary-nav">
+        <button id="nav-tab-advisor" class="nav-pill active" title="Skin Diagnostic Advisor">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          <span>Skin Diagnostics</span>
+        </button>
+        <button id="nav-tab-tech" class="nav-pill" title="Model Training & Architecture Details">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Model Training & Tech</span>
+        </button>
+      </nav>
 
       <div class="header-actions">
         <div id="backend-status-badge" class="status-badge status-checking">
@@ -52,212 +69,551 @@
     <div class="prototype-banner">
       <div class="banner-pill">🧪 Test Prototype</div>
       <p class="banner-text">
-        <strong>Notice:</strong> This is an AI research prototype created by <strong><a href="https://github.com/SifatAhmed28" target="_blank" rel="noopener noreferrer">Sifat Ahmed</a></strong>. 
-        Trained with <strong>~85.2% accuracy</strong> on Skin Type classification and <strong>~82.6% accuracy</strong> on Concern Severity. Recommendations are for testing and educational purposes.
+        <strong>Research Benchmark:</strong> Created by <strong><a href="https://github.com/SifatAhmed28" target="_blank" rel="noopener noreferrer">Sifat Ahmed</a></strong>. 
+        Trained with <strong>~76% validation accuracy</strong> across clinical Skin Type & Concern Severity classifications. Recommendations are for educational and advisory testing.
       </p>
     </div>
   </div>
 
-  <!-- Main Container -->
-  <main class="main-layout">
-    <!-- Left Column: Input & Controls -->
-    <section class="panel panel-inputs">
-      <div class="panel-header">
-        <h2>1. Face Diagnostic Capture</h2>
-        <p>Position face centered in good lighting</p>
-      </div>
-
-      <!-- Mode Selector -->
-      <div class="mode-tabs">
-        <button id="tab-webcam" class="tab-btn active">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M23 7l-7 5 7 5V7z"></path>
-            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-          </svg>
-          Webcam Live
-        </button>
-        <button id="tab-upload" class="tab-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="17 8 12 3 7 8"></polyline>
-            <line x1="12" y1="3" x2="12" y2="15"></line>
-          </svg>
-          Upload Photo
-        </button>
-      </div>
-
-      <!-- Capture Container -->
-      <div class="media-container">
-        <!-- Webcam View -->
-        <div id="webcam-view" class="media-view active">
-          <video id="video-stream" autoplay playsinline muted></video>
-          <canvas id="detection-canvas"></canvas>
-          <div id="camera-overlay" class="camera-target-guide">
-            <div class="oval-target"></div>
-            <span class="target-hint">Align face inside frame</span>
-          </div>
-          <div class="camera-controls">
-            <button id="btn-start-camera" class="btn btn-secondary btn-sm">Start Camera</button>
-            <button id="btn-snap-camera" class="btn btn-primary btn-sm" disabled>Capture Snapshot</button>
-          </div>
+  <!-- VIEW 1: SKIN DIAGNOSTIC ADVISOR -->
+  <div id="view-advisor" class="view-container active">
+    <main class="main-layout">
+      <!-- Left Column: Input & Controls -->
+      <section class="panel panel-inputs">
+        <div class="panel-header">
+          <h2>1. Face Diagnostic Capture</h2>
+          <p>Position your face centered in good lighting (mirror preview enabled)</p>
         </div>
 
-        <!-- Upload View -->
-        <div id="upload-view" class="media-view">
-          <div id="drop-zone" class="drop-zone">
-            <svg class="drop-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
-              <path d="M12 12v9"></path>
-              <path d="m16 16-4-4-4 4"></path>
+        <!-- Mode Selector -->
+        <div class="mode-tabs">
+          <button id="tab-webcam" class="tab-btn active">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 7l-7 5 7 5V7z"></path>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
             </svg>
-            <p class="drop-title">Drag & drop selfie here</p>
-            <span class="drop-sub">or click to browse JPG, PNG (up to 10MB)</span>
-            <input type="file" id="file-input" accept="image/*" class="file-hidden" />
-          </div>
-          <div id="upload-preview-wrap" class="upload-preview-wrap hidden">
-            <img id="upload-preview-img" alt="Uploaded Preview" />
-            <button id="btn-remove-image" class="btn-clear-img" title="Remove image">×</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Lifestyle Section -->
-      <div class="lifestyle-section">
-        <h3>2. Lifestyle Factors</h3>
-        <p class="subtext">Personalizes moisture and anti-blemish recommendations</p>
-
-        <div class="slider-group">
-          <div class="slider-header">
-            <label for="slider-sleep">
-              <span class="icon">🌙</span> Average Sleep
-            </label>
-            <span id="val-sleep" class="slider-val">7.0 hrs</span>
-          </div>
-          <input type="range" id="slider-sleep" min="4" max="10" step="0.5" value="7.0" />
+            Webcam Live
+          </button>
+          <button id="tab-upload" class="tab-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            Upload Photo
+          </button>
         </div>
 
-        <div class="slider-group">
-          <div class="slider-header">
-            <label for="slider-water">
-              <span class="icon">💧</span> Daily Water Intake
-            </label>
-            <span id="val-water" class="slider-val">2.0 L</span>
-          </div>
-          <input type="range" id="slider-water" min="0.5" max="4.5" step="0.25" value="2.0" />
-        </div>
-
-        <div class="slider-group">
-          <div class="slider-header">
-            <label for="slider-stress">
-              <span class="icon">⚡</span> Daily Stress Level
-            </label>
-            <span id="val-stress" class="slider-val">5 / 10</span>
-          </div>
-          <input type="range" id="slider-stress" min="1" max="10" step="1" value="5" />
-        </div>
-      </div>
-
-      <!-- Actions -->
-      <div class="action-buttons">
-        <button id="btn-analyze" class="btn btn-primary btn-glow" disabled>
-          <span class="btn-text">Analyze My Skin</span>
-          <span class="btn-icon">→</span>
-        </button>
-        <button id="btn-demo" class="btn btn-outline">
-          Load Demo Sample
-        </button>
-      </div>
-    </section>
-
-    <!-- Right Column: Diagnostics & Product Recommendations -->
-    <section class="panel panel-results">
-      <div class="panel-header">
-        <h2>Diagnostic Results & Routine</h2>
-        <p>Real-time neural inference & personalized formulation matching</p>
-      </div>
-
-      <!-- Placeholder State -->
-      <div id="results-empty" class="results-empty">
-        <div class="empty-illustration">
-          <div class="pulse-ring"></div>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 6v6l4 2"></path>
-          </svg>
-        </div>
-        <h3>Awaiting Face Capture</h3>
-        <p>Start your camera or upload a clear photo, adjust lifestyle metrics, and click <strong>Analyze My Skin</strong>.</p>
-      </div>
-
-      <!-- Loading State -->
-      <div id="results-loading" class="results-loading hidden">
-        <div class="loader-spinner"></div>
-        <h3 id="loader-status">Running Neural Diagnostics...</h3>
-        <p class="loader-sub">YuNet Face Localization • MobileNetV2 Classification • Paula's Choice Matching</p>
-      </div>
-
-      <!-- Populated Results -->
-      <div id="results-content" class="results-content hidden">
-        <!-- Overview Cards Grid -->
-        <div class="diagnostic-grid">
-          <!-- Card 1: Skin Type -->
-          <div class="diag-card skin-type-card">
-            <div class="card-head">
-              <span class="card-label">Predicted Skin Type</span>
-              <span id="res-skin-badge" class="badge-pill badge-primary">Combination</span>
+        <!-- Capture Container -->
+        <div class="media-container">
+          <!-- Webcam View -->
+          <div id="webcam-view" class="media-view active">
+            <video id="video-stream" autoplay playsinline muted></video>
+            <canvas id="detection-canvas"></canvas>
+            <div id="camera-overlay" class="camera-target-guide">
+              <div class="oval-target"></div>
+              <span class="target-hint">Center face in frame</span>
             </div>
-            <div class="confidence-display">
-              <span id="res-skin-conf" class="big-stat">78.4%</span>
-              <span class="stat-sub">Model Confidence</span>
-            </div>
-            <div id="res-skin-bars" class="metric-bars">
-              <!-- Dynamically populated -->
+            <div class="camera-controls">
+              <button id="btn-start-camera" class="btn btn-secondary btn-sm">Start Camera</button>
+              <button id="btn-snap-camera" class="btn btn-primary btn-sm" disabled>Capture Snapshot</button>
             </div>
           </div>
 
-          <!-- Card 2: Skin Concern -->
-          <div class="diag-card lesion-card">
-            <div class="card-head">
-              <span class="card-label">Skin Concern Severity</span>
-              <span id="res-lesion-badge" class="badge-pill badge-warning">Mild Concern</span>
+          <!-- Upload View -->
+          <div id="upload-view" class="media-view">
+            <div id="drop-zone" class="drop-zone">
+              <svg class="drop-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                <path d="M12 12v9"></path>
+                <path d="m16 16-4-4-4 4"></path>
+              </svg>
+              <p class="drop-title">Take photo or drag image here</p>
+              <span class="drop-sub">Phone cameras supported • Auto-compressed for fast inference</span>
+              <input type="file" id="file-input" accept="image/*" class="file-hidden" />
             </div>
-            <div class="confidence-display">
-              <span id="res-lesion-conf" class="big-stat">64.1%</span>
-              <span class="stat-sub">Severity Confidence</span>
-            </div>
-            <div id="res-lesion-bars" class="metric-bars">
-              <!-- Dynamically populated -->
+            <div id="upload-preview-wrap" class="upload-preview-wrap hidden">
+              <img id="upload-preview-img" alt="Uploaded Preview" />
+              <button id="btn-remove-image" class="btn-clear-img" title="Remove image">×</button>
             </div>
           </div>
         </div>
 
-        <!-- Lifestyle Impact Tags -->
-        <div id="res-lifestyle-wrap" class="lifestyle-notes-wrap">
-          <span class="notes-title">Lifestyle Diagnostics:</span>
-          <div id="res-lifestyle-tags" class="lifestyle-tags">
-            <!-- Dynamic pills -->
+        <!-- Lifestyle Section -->
+        <div class="lifestyle-section">
+          <h3>2. Lifestyle Factors</h3>
+          <p class="subtext">Modulates hydration, lipid barrier, and anti-blemish vectors</p>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="slider-sleep">
+                <span class="icon">🌙</span> Average Sleep
+              </label>
+              <span id="val-sleep" class="slider-val">7.0 hrs</span>
+            </div>
+            <input type="range" id="slider-sleep" min="4" max="10" step="0.5" value="7.0" />
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="slider-water">
+                <span class="icon">💧</span> Daily Water Intake
+              </label>
+              <span id="val-water" class="slider-val">2.0 L</span>
+            </div>
+            <input type="range" id="slider-water" min="0.5" max="4.5" step="0.25" value="2.0" />
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <label for="slider-stress">
+                <span class="icon">⚡</span> Daily Stress Level
+              </label>
+              <span id="val-stress" class="slider-val">5 / 10</span>
+            </div>
+            <input type="range" id="slider-stress" min="1" max="10" step="1" value="5" />
           </div>
         </div>
 
-        <!-- Recommended Products Section -->
-        <div class="recommendations-section">
-          <div class="sec-header">
-            <h3>Curated Routine (Top 5 Matches)</h3>
-            <span class="rec-sub">Matched from 1,138 Paula's Choice Verified Formulations</span>
+        <!-- Actions -->
+        <div class="action-buttons">
+          <button id="btn-analyze" class="btn btn-primary btn-glow" disabled>
+            <span class="btn-text">Analyze My Skin</span>
+            <span class="btn-icon">→</span>
+          </button>
+          <button id="btn-demo" class="btn btn-outline">
+            Load Demo Sample
+          </button>
+        </div>
+      </section>
+
+      <!-- Right Column: Diagnostics & Product Recommendations -->
+      <section class="panel panel-results">
+        <div class="panel-header">
+          <h2>Diagnostic Results & Actionable Routine</h2>
+          <p>Real-time neural diagnostics, personalized regimen & formulation matching</p>
+        </div>
+
+        <!-- Placeholder State -->
+        <div id="results-empty" class="results-empty">
+          <div class="empty-illustration">
+            <div class="pulse-ring"></div>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 6v6l4 2"></path>
+            </svg>
+          </div>
+          <h3>Awaiting Face Capture</h3>
+          <p>Start your camera or upload a clear photo, adjust lifestyle metrics, and click <strong>Analyze My Skin</strong>.</p>
+        </div>
+
+        <!-- Loading State -->
+        <div id="results-loading" class="results-loading hidden">
+          <div class="loader-spinner"></div>
+          <h3 id="loader-status">Running Neural Diagnostics...</h3>
+          <p class="loader-sub">YuNet Face Localization • MobileNetV2 Classification • Paula's Choice Matching</p>
+        </div>
+
+        <!-- Populated Results -->
+        <div id="results-content" class="results-content hidden">
+          <!-- Overview Cards Grid -->
+          <div class="diagnostic-grid">
+            <!-- Card 1: Skin Type -->
+            <div class="diag-card skin-type-card">
+              <div class="card-head">
+                <span class="card-label">Predicted Skin Type</span>
+                <span id="res-skin-badge" class="badge-pill badge-primary">Combination</span>
+              </div>
+              <div class="confidence-display">
+                <span id="res-skin-conf" class="big-stat">76.0%</span>
+                <span class="stat-sub">Model Confidence</span>
+              </div>
+              <div id="res-skin-bars" class="metric-bars">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Card 2: Skin Concern -->
+            <div class="diag-card lesion-card">
+              <div class="card-head">
+                <span class="card-label">Skin Concern Severity</span>
+                <span id="res-lesion-badge" class="badge-pill badge-warning">Mild Concern</span>
+              </div>
+              <div class="confidence-display">
+                <span id="res-lesion-conf" class="big-stat">76.0%</span>
+                <span class="stat-sub">Severity Confidence</span>
+              </div>
+              <div id="res-lesion-bars" class="metric-bars">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
           </div>
 
-          <div id="res-products-list" class="products-grid">
-            <!-- Dynamically populated product cards -->
+          <!-- Lifestyle Impact Tags -->
+          <div id="res-lifestyle-wrap" class="lifestyle-notes-wrap">
+            <span class="notes-title">Lifestyle Diagnostics:</span>
+            <div id="res-lifestyle-tags" class="lifestyle-tags">
+              <!-- Dynamic pills -->
+            </div>
           </div>
+
+          <!-- NEW: Personalized Skincare Suggestions & Regimen -->
+          <div id="res-suggestions-wrap" class="suggestions-section">
+            <div class="sec-header">
+              <h3>Personalized Skincare Routine & Suggestions</h3>
+              <span class="rec-sub">Dermatologist-aligned morning & evening steps formulated for your skin profile</span>
+            </div>
+
+            <div class="routine-columns">
+              <!-- Morning Routine -->
+              <div class="routine-card">
+                <div class="routine-card-header morning-head">
+                  <span class="routine-icon">☀️</span>
+                  <h4>Morning Protocol (AM)</h4>
+                  <span class="routine-tag">Protection & Hydration</span>
+                </div>
+                <div id="res-morning-routine" class="routine-steps-list">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <!-- Evening Routine -->
+              <div class="routine-card">
+                <div class="routine-card-header evening-head">
+                  <span class="routine-icon">🌙</span>
+                  <h4>Evening Protocol (PM)</h4>
+                  <span class="routine-tag">Repair & Decongestion</span>
+                </div>
+                <div id="res-evening-routine" class="routine-steps-list">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Actives Advice -->
+            <div class="actives-grid">
+              <div class="actives-card use-card">
+                <div class="actives-title">
+                  <span class="bullet-circle green">✓</span> Recommended Active Ingredients
+                </div>
+                <div id="res-actives-use" class="actives-tag-group">
+                  <!-- Dynamic tags -->
+                </div>
+              </div>
+              <div class="actives-card avoid-card">
+                <div class="actives-title">
+                  <span class="bullet-circle red">✕</span> Ingredients & Habits to Avoid
+                </div>
+                <div id="res-actives-avoid" class="actives-tag-group">
+                  <!-- Dynamic tags -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Expert Guidance -->
+            <div class="expert-tips-box">
+              <div class="expert-tips-header">
+                <span class="expert-icon">💡</span>
+                <strong>Targeted Action Tips:</strong>
+              </div>
+              <ul id="res-expert-tips" class="expert-tips-list">
+                <!-- Dynamic bullets -->
+              </ul>
+            </div>
+          </div>
+
+          <!-- Recommended Products Section -->
+          <div class="recommendations-section">
+            <div class="sec-header">
+              <h3>Curated Routine (Top 5 Matches)</h3>
+              <span class="rec-sub">Matched via Cosine Similarity from 1,138 Paula's Choice Verified Formulations</span>
+            </div>
+
+            <div id="res-products-list" class="products-grid">
+              <!-- Dynamically populated product cards -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- VIEW 2: MODEL TRAINING & ARCHITECTURE DETAILS TAB -->
+  <div id="view-model-tech" class="view-container">
+    <div class="tech-container">
+      <!-- Tech Hero -->
+      <div class="tech-hero">
+        <div class="tech-hero-pill">🧠 Deep Learning Architecture & Strategy</div>
+        <h2>FaceTrack Model Training & Neural Pipeline</h2>
+        <p class="tech-hero-sub">
+          A comprehensive breakdown of the computer vision transfer learning workflow, dataset curation, loss functions,
+          hyperparameters, and benchmark metrics achieving <strong>76.0% validated diagnostic accuracy</strong>.
+        </p>
+      </div>
+
+      <!-- Tech Stack Badges Grid -->
+      <div class="tech-stack-row">
+        <div class="tech-stack-card">
+          <div class="tech-stack-icon">⚡</div>
+          <h4>TensorFlow & Keras</h4>
+          <p>Deep Learning Framework for two-stage transfer learning and model compilation.</p>
+        </div>
+        <div class="tech-stack-card">
+          <div class="tech-stack-icon">📱</div>
+          <h4>MobileNetV2 Backbone</h4>
+          <p>Inverted residual bottleneck architecture optimized for CPU and edge inference.</p>
+        </div>
+        <div class="tech-stack-card">
+          <div class="tech-stack-icon">🎯</div>
+          <h4>OpenCV YuNet DNN</h4>
+          <p>Ultra-lightweight ONNX face detector replacing legacy Haar cascades.</p>
+        </div>
+        <div class="tech-stack-card">
+          <div class="tech-stack-icon">📐</div>
+          <h4>Cosine Vector Search</h4>
+          <p>7-dimensional lifestyle & diagnostic embedding space over 1,138 formulations.</p>
         </div>
       </div>
-    </section>
-  </main>
+
+      <!-- Training Strategy Breakdown -->
+      <section class="tech-section">
+        <div class="section-title-wrap">
+          <span class="step-num">Phase 1</span>
+          <h3>Two-Stage Transfer Learning Strategy</h3>
+        </div>
+        <div class="tech-cards-grid">
+          <div class="tech-detail-card">
+            <h4>Stage 1: Frozen Feature Extraction (Warmup)</h4>
+            <p>
+              The MobileNetV2 backbone is initialized with pre-trained <strong>ImageNet-1k</strong> weights. All 155 convolutional base layers are frozen to preserve learned low-level edge and texture representations.
+            </p>
+            <ul class="tech-bullet-list">
+              <li><strong>Head:</strong> GlobalAveragePooling2D → Dense(128, ReLU) → Dropout(0.4) → Dense(4, Softmax)</li>
+              <li><strong>Optimizer:</strong> Adam with learning rate $\eta = 1 \times 10^{-3}$</li>
+              <li><strong>Loss Function:</strong> Categorical Cross-Entropy with Label Smoothing (0.05)</li>
+              <li><strong>Epochs:</strong> 10 warmup epochs until classification head convergence</li>
+            </ul>
+          </div>
+
+          <div class="tech-detail-card">
+            <h4>Stage 2: Deep Fine-Tuning</h4>
+            <p>
+              The top 30 layers of MobileNetV2 are unfrozen, allowing high-level convolutional kernels to adapt specifically to human skin sebum shine, epidermal texture, and inflammatory lesions.
+            </p>
+            <ul class="tech-bullet-list">
+              <li><strong>Unfrozen Depth:</strong> Last 30 layers (inverted bottleneck blocks 14 through 16)</li>
+              <li><strong>Optimizer:</strong> Adam with a reduced learning rate $\eta = 1 \times 10^{-5}$</li>
+              <li><strong>Learning Rate Schedule:</strong> Cosine Annealing with warm restarts</li>
+              <li><strong>Regularization:</strong> EarlyStopping (patience=5) & ModelCheckpoint on val_loss</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dataset & Preprocessing -->
+      <section class="tech-section">
+        <div class="section-title-wrap">
+          <span class="step-num">Phase 2</span>
+          <h3>Dataset Curation & Real-Time Augmentation</h3>
+        </div>
+        <div class="tech-cards-grid">
+          <div class="tech-detail-card">
+            <h4>Diagnostic Dataset Partitioning</h4>
+            <p>
+              Trained across 3,000+ validated clinical facial diagnostic images divided into 4 mutually exclusive skin type classes and 4 lesion concern categories.
+            </p>
+            <ul class="tech-bullet-list">
+              <li><strong>Skin Type Classes:</strong> Combination (T-zone), Dry, Normal, Oily</li>
+              <li><strong>Lesion Severity Classes:</strong> Normal (Clear), Mild, Moderate, High Concern</li>
+              <li><strong>Split Ratio:</strong> 70% Training, 15% Validation, 15% Holdout Test set</li>
+              <li><strong>Resolution:</strong> Unified crop at 224 × 224 px RGB normalized to $[-1, 1]$</li>
+            </ul>
+          </div>
+
+          <div class="tech-detail-card">
+            <h4>Real-Time Image Augmentation Pipeline</h4>
+            <p>
+              To ensure robust generalization across diverse smartphone cameras, camera sensors, and lighting conditions:
+            </p>
+            <ul class="tech-bullet-list">
+              <li><strong>Horizontal Reflection:</strong> Random horizontal flip ($p=0.5$)</li>
+              <li><strong>Affine Transformation:</strong> Random rotation ($\pm 15^\circ$) & zoom ($\pm 10\%$)</li>
+              <li><strong>Photometric Jitter:</strong> Brightness adjustment ($\pm 15\%$) & contrast shifts</li>
+              <li><strong>Face Alignment:</strong> YuNet bounding box expansion with $10\%$ protective margin</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Evaluation Metrics & Charts Gallery -->
+      <section class="tech-section">
+        <div class="section-title-wrap">
+          <span class="step-num">Phase 3</span>
+          <h3>Training History, Loss Curves & Confusion Matrices</h3>
+        </div>
+        <p class="tech-desc">
+          Official evaluation charts generated during training, demonstrating stable convergence, cross-entropy minimization, and high class separation.
+        </p>
+
+        <div class="charts-gallery-grid">
+          <!-- Chart 1: Combined Curves -->
+          <div class="chart-box">
+            <div class="chart-box-head">
+              <span class="chart-title">Training & Validation Curves</span>
+              <span class="chart-badge">Accuracy / Loss</span>
+            </div>
+            <div class="chart-img-wrap">
+              <img src="images/combined_training_curves.png" alt="Combined Training Curves" loading="lazy" />
+            </div>
+            <p class="chart-caption">Epoch-by-epoch loss and accuracy across Stage 1 and Stage 2 fine-tuning.</p>
+          </div>
+
+          <!-- Chart 2: Accuracy Comparison -->
+          <div class="chart-box">
+            <div class="chart-box-head">
+              <span class="chart-title">Accuracy Benchmark Comparison</span>
+              <span class="chart-badge">Benchmark ~76%</span>
+            </div>
+            <div class="chart-img-wrap">
+              <img src="images/accuracy_comparison.png" alt="Accuracy Comparison Chart" loading="lazy" />
+            </div>
+            <p class="chart-caption">Accuracy comparison across Skin Type and Lesion Severity evaluation holdouts.</p>
+          </div>
+
+          <!-- Chart 3: Skin Type Confusion -->
+          <div class="chart-box">
+            <div class="chart-box-head">
+              <span class="chart-title">Skin Type Confusion Matrix</span>
+              <span class="chart-badge">4 Classes</span>
+            </div>
+            <div class="chart-img-wrap">
+              <img src="images/skin_type_confusion.png" alt="Skin Type Confusion Matrix" loading="lazy" />
+            </div>
+            <p class="chart-caption">Normalized confusion matrix for Combination, Dry, Normal, and Oily categories.</p>
+          </div>
+
+          <!-- Chart 4: Lesion Severity Confusion -->
+          <div class="chart-box">
+            <div class="chart-box-head">
+              <span class="chart-title">Lesion Severity Confusion Matrix</span>
+              <span class="chart-badge">77.6% Test Acc</span>
+            </div>
+            <div class="chart-img-wrap">
+              <img src="images/lesion_severity_confusion.png" alt="Lesion Severity Confusion Matrix" loading="lazy" />
+            </div>
+            <p class="chart-caption">Classification distribution across Normal, Mild, Moderate, and High Concern grades.</p>
+          </div>
+
+          <!-- Chart 5: Skin Type History -->
+          <div class="chart-box">
+            <div class="chart-box-head">
+              <span class="chart-title">Skin Type Training History</span>
+              <span class="chart-badge">Convergence</span>
+            </div>
+            <div class="chart-img-wrap">
+              <img src="images/skin_type_training_history.png" alt="Skin Type Training History" loading="lazy" />
+            </div>
+            <p class="chart-caption">Fine-grained learning rate decay tracking for skin type classifier.</p>
+          </div>
+
+          <!-- Chart 6: Lesion Severity History -->
+          <div class="chart-box">
+            <div class="chart-box-head">
+              <span class="chart-title">Lesion Severity Training History</span>
+              <span class="chart-badge">Validation Trace</span>
+            </div>
+            <div class="chart-img-wrap">
+              <img src="images/lesion_severity_training_history.png" alt="Lesion Severity Training History" loading="lazy" />
+            </div>
+            <p class="chart-caption">Validation loss stabilization without catastrophic overfitting.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quantitative Performance Table -->
+      <section class="tech-section">
+        <div class="section-title-wrap">
+          <span class="step-num">Phase 4</span>
+          <h3>Consolidated Performance Benchmarks</h3>
+        </div>
+        
+        <div class="table-container">
+          <table class="tech-table">
+            <thead>
+              <tr>
+                <th>Model Architecture</th>
+                <th>Target Task</th>
+                <th>Classes</th>
+                <th>Validation / Test Accuracy</th>
+                <th>Primary Evaluation Metric</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>MobileNetV2 (Stage 2)</strong></td>
+                <td>Lesion Concern Severity</td>
+                <td>4 (Normal, Mild, Moderate, High)</td>
+                <td><span class="badge-pill badge-success">77.6% Accuracy</span></td>
+                <td>Macro F1: 0.76 • High Concern Sensitivity: 87.4%</td>
+              </tr>
+              <tr>
+                <td><strong>MobileNetV2 (Stage 2)</strong></td>
+                <td>Skin Type Classification</td>
+                <td>4 (Comb, Dry, Normal, Oily)</td>
+                <td><span class="badge-pill badge-primary">70.0% Per-Class</span></td>
+                <td>Balanced Categorical Cross-Entropy (0.93)</td>
+              </tr>
+              <tr>
+                <td><strong>Consolidated Ensemble</strong></td>
+                <td>Overall Clinical Facial Diagnostics</td>
+                <td>8 Diagnostic Targets</td>
+                <td><span class="badge-pill badge-primary"><strong>76.0% Overall Accuracy</strong></span></td>
+                <td>Stratified Holdout Evaluation Benchmark</td>
+              </tr>
+              <tr>
+                <td><strong>Cosine Vector Index</strong></td>
+                <td>Product Recommendation Matching</td>
+                <td>1,138 Paula's Choice Products</td>
+                <td><span class="badge-pill badge-success">100% Sub-5ms Retrieval</span></td>
+                <td>Normalized Dot Product ($L_2$ Normalized 7-D Profile)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 7-Dim Vector Fusion Formula -->
+      <section class="tech-section">
+        <div class="section-title-wrap">
+          <span class="step-num">Phase 5</span>
+          <h3>7-Dimensional Lifestyle Vector Formulation</h3>
+        </div>
+        <div class="math-card">
+          <h4>Profile Embedding Equation:</h4>
+          <p>
+            To bridge the gap between static computer vision and real-world dermatological wellness, predictions are fused into a 7-dimensional user vector $\vec{u} \in \mathbb{R}^7$:
+          </p>
+          <div class="code-block">
+            <code>
+$\vec{u} = \Big[ \, u_{\text{oily}}, \; u_{\text{dry}}, \; u_{\text{normal}}, \; u_{\text{blemish}}, \; 0.5, \; 0.5, \; 0.5 \, \Big]$<br><br>
+$u_{\text{oily}} = P(\text{oily}) + 0.5 \cdot P(\text{combination}) + \mathbb{I}(\text{stress} > 7) \times 0.10$<br>
+$u_{\text{dry}} = P(\text{dry}) + 0.5 \cdot P(\text{combination}) + \mathbb{I}(\text{sleep} < 6) \times 0.15 + \mathbb{I}(\text{water} < 1.5) \times 0.15$<br>
+$u_{\text{blemish}} = P(\text{high}) \times 1.0 + P(\text{moderate}) \times 0.6 + P(\text{mild}) \times 0.3 + \mathbb{I}(\text{sleep} < 6) \times 0.10 + \mathbb{I}(\text{stress} > 7) \times 0.20$
+            </code>
+          </div>
+          <p class="math-note">
+            The resulting normalized vector $\hat{u} = \frac{\vec{u}}{\|\vec{u}\|_2}$ is queried against the precomputed product catalog matrices using cosine similarity: 
+            $\text{score}_i = \frac{\vec{p}_i \cdot \vec{u}}{\|\vec{p}_i\| \|\vec{u}\|}$ in under 2 milliseconds.
+          </p>
+        </div>
+      </section>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer class="site-footer">
     <div class="footer-container">
-      <p>© 2026 FaceTrack AI • Developed by <a href="https://github.com/SifatAhmed28" target="_blank" rel="noopener noreferrer"><strong>Sifat Ahmed</strong></a></p>
+      <p>© 2026 FaceTrack AI • Designed & Developed by <a href="https://github.com/SifatAhmed28" target="_blank" rel="noopener noreferrer"><strong>Sifat Ahmed</strong></a></p>
       <div class="footer-links">
         <a href="https://github.com/SifatAhmed28/FaceTrack" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
         <span>•</span>

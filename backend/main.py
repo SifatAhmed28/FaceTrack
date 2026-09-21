@@ -90,9 +90,20 @@ def kb_stats():
 
 
 def _read_image_bytes(image_bytes: bytes) -> np.ndarray:
-    """Convert raw image bytes into OpenCV BGR numpy array."""
+    """Convert raw image bytes into OpenCV BGR numpy array with EXIF auto-rotation and safe resizing."""
     try:
-        pil_img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        from PIL import ImageOps
+        pil_img = Image.open(io.BytesIO(image_bytes))
+        
+        # Auto-rotate smartphone photos based on EXIF tag (prevents sideways faces)
+        pil_img = ImageOps.exif_transpose(pil_img)
+        pil_img = pil_img.convert("RGB")
+        
+        # Downscale ultra-high resolution smartphone photos (e.g. 12-48 MP) to safe size
+        max_dimension = 1280
+        if max(pil_img.size) > max_dimension:
+            pil_img.thumbnail((max_dimension, max_dimension), Image.Resampling.LANCZOS)
+            
         rgb_arr = np.array(pil_img)
         bgr_arr = cv2.cvtColor(rgb_arr, cv2.COLOR_RGB2BGR)
         return bgr_arr
@@ -185,11 +196,42 @@ def sample_analysis():
                 "High Concern": 3.0
             }
         },
-        "user_vector": [0.428, 0.504, 0.068, 0.445, 0.500, 0.500, 0.500],
         "lifestyle_notes": [
-            "Sleep < 6h: Boosted dryness & acne concern",
-            "High Stress (>7): Elevated acne & oiliness factors"
+            "Sleep < 6h: Boosted barrier dryness & acne sensitivity",
+            "High Stress (>7/10): Elevated sebum and reactive barrier factor"
         ],
+        "suggestions": {
+            "skin_type": "Combination",
+            "lesion_severity": "Mild",
+            "morning_routine": [
+                {"step": "Step 1: Gentle Cleanse", "action": "Wash with a pH-balanced, non-foaming gel cleanser to refresh without stripping moisture."},
+                {"step": "Step 2: Hydrating Serum", "action": "Apply lightweight Niacinamide (2-5%) or Hyaluronic Acid to balance sebum and hydrate."},
+                {"step": "Step 3: Lightweight Moisturizer", "action": "Use an oil-free water-gel on the T-zone and slightly richer lotion on dry cheeks."},
+                {"step": "Step 4: Broad-Spectrum Sunscreen", "action": "Finish with fluid SPF 30-50 that leaves zero greasy residue."}
+            ],
+            "evening_routine": [
+                {"step": "Step 1: Clarifying Cleanse", "action": "Remove SPF and impurities with micellar water followed by a gentle gel wash."},
+                {"step": "Step 2: Targeted Active Treatment", "action": "Apply 2% Salicylic Acid (BHA) 2-3x weekly to decongest pores in the T-zone."},
+                {"step": "Step 3: Barrier Recovery Cream", "action": "Lock in hydration with a ceramide and centella-infused soothing emulsion."}
+            ],
+            "actives_to_use": [
+                "Niacinamide (Oil Balancing)",
+                "Salicylic Acid (Pore Decongestion)",
+                "Ceramides (Lipid Barrier)",
+                "Hyaluronic Acid (Hydration)"
+            ],
+            "actives_to_avoid": [
+                "Heavy pore-clogging mineral oils",
+                "High-alcohol drying astringents",
+                "Over-aggressive physical apricot/walnut scrubs"
+            ],
+            "expert_tips": [
+                "Zone-treat your face: target oil control strictly on forehead and nose, while protecting drier cheek areas.",
+                "Mild concerns detected: Maintain a steady routine for 4-6 weeks to observe clear textural improvements.",
+                "Sleep < 6h: Boosted barrier dryness & acne sensitivity",
+                "High Stress (>7/10): Elevated sebum and reactive barrier factor"
+            ]
+        },
         "recommendations": [
             {
                 "product_name": "CeraVe Hydrating Facial Cleanser",
